@@ -1,0 +1,46 @@
+<project basedir=".">
+    
+    <description>
+        My First Ant Project
+    </description>
+    <property file="build.properties"/>
+    
+    
+    <path id="classpath">
+        <fileset dir="web\WEB-INF\lib" includes="**/*.jar"/>
+    </path>
+    
+    <target name="clean">
+        <echo>
+            Cleaning webapps folder..
+        </echo>
+        <delete dir="${tomcat-webapps}\${project-name}" verbose="true"/>
+        <delete file="${tomcat-webapps}\${project-name}.war" verbose="true"/>
+    </target>
+    
+    <target name="devise Directories" depends="clean">
+        <echo>
+            Preparing Required Directories..
+        </echo>
+        <mkdir dir="${classes.dir}"/>
+        <mkdir dir="${jar.dir}"/>
+    </target>    
+    
+    <target name="compile" depends="devise Directories">
+        <echo>
+            Compiling files..
+        </echo>
+        <javac srcdir="${javasrc.dir}" destdir="${classes.dir}" classpathref="classpath"/>
+    </target>
+    
+    <target name="war" depends="compile">
+        <echo>
+            Preparing WAR file..
+        </echo>
+        <war destfile="${tomcat-webapps}\${project-name}.war" webxml="${deployment.descriptor}">
+            <fileset dir="web"/> 
+            <fileset dir="resources"/>
+            <classes dir="${classes.dir}"/>
+        </war>
+    </target>    
+</project>
